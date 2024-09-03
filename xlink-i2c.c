@@ -39,7 +39,7 @@ int i2c_init() {
     }
 
     // Set a longer timeout, e.g., 25 seconds (25000 milliseconds)
-    if (set_i2c_timeout(i2c_fd, 15000) < 0) {
+    if (set_i2c_timeout(i2c_fd, 10000) < 0) {
         close(i2c_fd);
         return -1;
     }
@@ -131,7 +131,7 @@ int i2c_write_long(unsigned char *write_command, int writecomm_len, unsigned cha
         // Prepare the ioctl data structure
         ioctl_data.msgs = msgs;
         ioctl_data.nmsgs = num_chunks;
-        printf("Num of Chunks: %d ",num_chunks);
+        printf("Num of Chunks: %d \r\n",num_chunks);
         
     }
 
