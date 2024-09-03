@@ -11,6 +11,16 @@
 #include <errno.h>
 #include <stdlib.h>
 
+/* scan the bus 
+
+    sudo i2cdetect -y 1
+
+Install packages required
+
+    sudo apt-get install -y libi2c-dev libc6-dev pigpio build-essential
+
+*/
+
 #define I2C_DEV_PATH "/dev/i2c-1"  // Use the correct I2C bus number
 #define I2C_SLAVE_ADDR 0x40        // Replace with your I2C device's slave address
 #define BITSTREAM_FILE "test.bit"  // The bitstream file
@@ -39,10 +49,10 @@ int i2c_init() {
     }
 
     // Set a longer timeout, e.g., 25 seconds (25000 milliseconds)
-    if (set_i2c_timeout(i2c_fd, 10000) < 0) {
-        close(i2c_fd);
-        return -1;
-    }
+    //if (set_i2c_timeout(i2c_fd, 10000) < 0) {
+    //    close(i2c_fd);
+    //    return -1;
+    //}
 
     if (ioctl(i2c_fd, I2C_SLAVE, I2C_SLAVE_ADDR) < 0) {
         perror("Failed to acquire bus access and/or talk to slave");
@@ -118,7 +128,7 @@ int i2c_write_long(unsigned char *write_command, int writecomm_len, unsigned cha
 
             // Calculate the size of the current chunk
             int current_chunk_size = (i == num_chunks - 1) ? (total_len_bytes % chunk_size) : chunk_size;
-            printf("Chunk Size: %d\r\n", current_chunk_size);
+            //printf("Chunk Size: %d\r\n", current_chunk_size);
             if (current_chunk_size == 0) current_chunk_size = chunk_size;  // Handle case where the last chunk is exactly chunk_size bytes
 
             msgs[i].len = current_chunk_size;
