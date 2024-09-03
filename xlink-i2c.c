@@ -60,11 +60,10 @@ int i2c_write_byte(int length, unsigned char *data_bytes){
     return 0;
 } 
 
-
 int i2c_write_long(unsigned char *write_command, int writecomm_len, unsigned char *write_data, int writedata_len) {
   struct i2c_rdwr_ioctl_data ioctl_data;  
 
-    if (writedata_len<=32 ){
+    if (writedata_len<=8192 ){
         struct i2c_msg msgs[2];
         
         unsigned char *buffers[2] = {write_command, write_data};
@@ -102,6 +101,7 @@ int i2c_write_long(unsigned char *write_command, int writecomm_len, unsigned cha
 
             // Calculate the size of the current chunk
             int current_chunk_size = (i == num_chunks - 1) ? (total_len_bytes % chunk_size) : chunk_size;
+            printf("Chunk Size: %d\r\n", current_chunk_size);
             if (current_chunk_size == 0) current_chunk_size = chunk_size;  // Handle case where the last chunk is exactly chunk_size bytes
 
             msgs[i].len = current_chunk_size;
