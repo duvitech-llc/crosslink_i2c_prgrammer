@@ -18,12 +18,29 @@
 
 int i2c_fd;
 
+
+// Set the timeout in milliseconds
+int set_i2c_timeout(int file, int timeout_ms) {
+    int timeout = timeout_ms;
+    if (ioctl(file, I2C_TIMEOUT, timeout) < 0) {
+        perror("Failed to set I2C timeout");
+        return -1;
+    }
+    return 0;
+}
+
 // Function to initialize the I2C interface
 int i2c_init() {
 
     i2c_fd = open(I2C_DEV_PATH, O_RDWR);
     if (i2c_fd < 0) {
         perror("Failed to open the i2c bus");
+        return -1;
+    }
+
+    // Set a longer timeout, e.g., 25 seconds (25000 milliseconds)
+    if (set_i2c_timeout(i2c_fd, 15000) < 0) {
+        close(i2c_fd);
         return -1;
     }
 
