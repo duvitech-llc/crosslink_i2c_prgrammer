@@ -49,10 +49,10 @@ int i2c_init() {
     }
 
     // Set a longer timeout, e.g., 25 seconds (25000 milliseconds)
-    //if (set_i2c_timeout(i2c_fd, 10000) < 0) {
-    //    close(i2c_fd);
-    //    return -1;
-    //}
+    if (set_i2c_timeout(i2c_fd, 10000) < 0) {
+        close(i2c_fd);
+        return -1;
+    }
 
     if (ioctl(i2c_fd, I2C_SLAVE, I2C_SLAVE_ADDR) < 0) {
         perror("Failed to acquire bus access and/or talk to slave");
